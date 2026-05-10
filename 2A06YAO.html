@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>穿越歷史 · 謀士之路</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: #2c221b;
+            font-family: 'Segoe UI', '微軟正黑體', 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            margin: 0;
+        }
+        .game {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fffaf0;
+            border-radius: 48px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.4);
+            padding: 20px 25px 35px;
+        }
+        /* 開始畫面 */
+        #startScreen {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        .title {
+            font-size: 2.5rem;
+            color: #a5511c;
+            font-weight: bold;
+        }
+        .sub {
+            color: #6b4a2a;
+            margin: 15px 0;
+        }
+        .start-btn {
+            background: #c2853e;
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        /* 事件卡片 (預設隱藏，逐步解鎖) */
+        .event-card {
+            background: #fff6e8;
+            border-radius: 32px;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 12px solid #bf7d3c;
+            display: none;
+        }
+        .event-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #9b4424;
+        }
+        .emperor-area {
+            display: flex;
+            gap: 20px;
+            background: #f7ebd0;
+            border-radius: 60px;
+            padding: 15px;
+            margin: 15px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .emperor-icon {
+            font-size: 3rem;
+            background: #e7c8a0;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dialogue {
+            flex: 1;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        .history-art {
+            background: #e7cfaa;
+            border-radius: 24px;
+            padding: 12px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .option-btn {
+            background: #e1c394;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            border-radius: 40px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .result-area {
+            background: #fbefd2;
+            margin-top: 15px;
+            padding: 12px;
+            border-left: 6px solid #c07d41;
+            border-radius: 16px;
+            display: none;
+        }
+        .show {
+            display: block;
+        }
+        .transition {
+            background: #e9dbc9;
+            padding: 15px;
+            text-align: center;
+            border-radius: 40px;
+            margin: 20px 0;
+            font-style: italic;
+            display: none;
+        }
+        #settlement {
+            background: #dac29c;
+            border-radius: 32px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        .btn-reset {
+            background: #9b6a3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="game">
+    <!-- 開始畫面 -->
+    <div id="startScreen">
+        <div class="title">📜 穿越歷史 · 謀士之路</div>
+        <div class="sub">北宋 → 甲午戰爭</div>
+        <p>⚡ 你是皇帝身邊的謀士，每次皇帝遇事都會問你意見。<br>
+        🎯 做出你的選擇，會看到真實歷史的結局。<br>
+        ✅ 完成四個事件後，將根據你的所有選擇給予評價。</p >
+        <button class="start-btn" id="startBtn">🎮 開始微服出巡</button>
+    </div>
+
+    <!-- 遊戲主體（初始隱藏） -->
+    <div id="gameArea" style="display: none;">
+        <!-- 事件1：王安石變法 -->
+        <div id="event1" class="event-card">
+            <div class="event-title">🏮 事件一：王安石變法 (1069年)</div>
+            <div class="emperor-area">
+                <div class="emperor-icon">👑</div>
+                <div class="dialogue">「朕即位以來，國庫空虛，外患頻仍。王安石說變法救國，司馬光說祖宗之法不可變。愛卿，朕該聽誰的？」</div>
+            </div>
+            <div class="history-art">📜 北宋汴京繁華，變法浪潮暗湧</div>
+            <div class="options">
+                <button class="opt1a">🏛️ 支持王安石 · 全面推行新法</button>
+                <button class="opt1b">🌾 支持司馬光 · 維持舊制</button>
+            </div>
+            <div id="result1" class="result-area"></div>
+        </div>
+
+        <!-- 過渡1 -->
+        <div id="trans1" class="transition">⏳ 你閉上雙眼，時空流轉…… 醒來已是 1126 年，汴京城下金兵壓境 ⏳</div>
+
+        <!-- 事件2：靖康之變 -->
+        <div id="event2" class="event-card">
+            <div class="event-title">⚔️ 事件二：靖康之變 (1126年)</div>
+            <div class="emperor-area">
+                <div class="emperor-icon">👑</div>
+                <div class="dialogue">「金兵已到汴京城下！李綱說死守待援，白時中說割地求和。朕……朕該怎麼辦？」</div>
+            </div>
+            <div class="history-art">🗺️ 金兵南下，汴京危急</div>
+            <div class="options">
+                <button class="opt2a">⚔️ 主戰 · 死守汴京</button>
+                <button class="opt2b">🤝 主和 · 割地求和</button>
+            </div>
+            <div id="result2" class="result-area"></div>
+        </div>
+
+        <!-- 過渡2 -->
+        <div id="trans2" class="transition">⏳ 你再次穿越，睜開眼已是 1840 年的紫禁城，英國艦隊來勢洶洶 ⏳</div>
+
+        <!-- 事件3：鴉片戰爭 -->
+        <div id="event3" class="event-card">
+            <div class="event-title">🚬 事件三：鴉片戰爭 (1840年)</div>
+            <div class="emperor-area">
+                <div class="emperor-icon">👑</div>
+                <div class="dialogue">「林則徐虎門銷煙，英國艦隊殺到大沽口！林則徐說打，琦善說和。朕該怎麼定奪？」</div>
+            </div>
+            <div class="history-art">🔥 虎門銷煙，英國艦隊北上</div>
+            <div class="options">
+                <button class="opt3a">🏹 主戰 · 堅決抵抗</button>
+                <button class="opt3b">🍃 主和 · 議和通商</button>
+            </div>
+            <div id="result3" class="result-area"></div>
+        </div>
+
+        <!-- 過渡3 -->
+        <div id="trans3" class="transition">⏳ 最後一次穿越，你來到 1894 年的頤和園，光緒皇帝正為朝鮮戰事煩惱 ⏳</div>
+
+        <!-- 事件4：甲午戰爭 -->
+        <div id="event4" class="event-card">
+            <div class="event-title">⚓ 事件四：甲午戰爭 (1894年)</div>
+            <div class="emperor-area">
+                <div class="emperor-icon">👑</div>
+                <div class="dialogue">「日本出兵朝鮮，朕想打！可李鴻章說北洋水師多年未添新艦不能打。愛卿，你幫朕拿主意！」</div>
+            </div>
+            <div class="history-art">🎌 黃海海戰，北洋水師奮戰</div>
+            <div class="options">
+                <button class="opt4a">⚔️ 主戰 · 立即宣戰</button>
+                <button class="opt4b">🕊️ 主和 · 忍讓避戰</button>
+            </div>
+            <div id="result4" class="result-area"></div>
+        </div>
+
+        <!-- 結算區域 -->
+        <div id="settlement"></div>
+    </div>
+    <footer>🔍 每個選擇都會顯示歷史真相，完成所有事件後獲得評語</footer>
+</div>
+
+<script>
+    // 儲存玩家的選擇 (1:事件, 2:事件...)
+    let choices = {1: null, 2: null, 3: null, 4: null};
+
+    // 歷史分析庫
+    const analysis = {
+        1: {
+            A: "📜 真實歷史：宋神宗選擇全面推行新法，但因反對激烈，神宗死後新法幾乎全廢。若你支持王安石，你的立場與史實中的皇帝相同。",
+            B: "📜 真實歷史：宋神宗並未採納保守派方案，仍推行變法。若你支持司馬光，你的建議未被採納，但反對派的聲音確實讓變法受阻。"
+        },
+        2: {
+            A: "📜 真實歷史：宋欽宗先和後戰，金兵二次南下破汴京，北宋亡。你若主戰，與李綱同立場，可惜朝廷未堅持到底。",
+            B: "📜 真實歷史：主和派一度佔上風，但割地賠款後金兵仍來，終致亡國。求和無法換來真正的和平。"
+        },
+        3: {
+            A: "📜 真實歷史：道光帝懲辦林則徐，簽《南京條約》。你主戰，但清朝武器落後，難以取勝。",
+            B: "📜 真實歷史：琦善主和仍無法避免戰爭，清朝戰敗簽約。妥協不能改變落後本質。"
+        },
+        4: {
+            A: "📜 真實歷史：光緒宣戰，陸海皆敗，簽《馬關條約》割台澎。你的主戰決心與光緒相同。",
+            B: "📜 真實歷史：李鴻章的主和意見未被採納，戰爭仍爆發。忍讓無法改變日本的野心。"
+        }
+    };
+
+    // 顯示結果的函數
+    function showResult(eventId, choiceKey) {
+        const resultDiv = document.getElementById(`result${eventId}`);
+        if (!resultDiv) return;
+        const text = analysis[eventId][choiceKey];
+        resultDiv.innerHTML = `<strong>🧧【聖旨到】</strong><br>${text}`;
+        resultDiv.classList.add("show");
+    }
+
+    // 解鎖下一個事件
+    let currentMaxEvent = 1; // 已經解鎖到事件幾
+    function unlockNextEvent() {
+        if (currentMaxEvent === 1) {
+            document.getElementById("event2").style.display = "block";
+            document.getElementById("trans1").style.display = "block";
+            currentMaxEvent = 2;
+        } else if (currentMaxEvent === 2) {
+            document.getElementById("event3").style.display = "block";
+            document.getElementById("trans2").style.display = "block";
+            currentMaxEvent = 3;
+        } else if (currentMaxEvent === 3) {
+            document.getElementById("event4").style.display = "block";
+            document.getElementById("trans3").style.display = "block";
+            currentMaxEvent = 4;
+        } else if (currentMaxEvent === 4) {
+            // 所有事件完成，顯示結算
+            showSettlement();
+        }
+    }
+
+    // 檢查是否所有事件都已選擇
+    function allChoicesMade() {
+        return choices[1] && choices[2] && choices[3] && choices[4];
+    }
+
+    // 結算畫面
+    function showSettlement() {
+        const settlementDiv = document.getElementById("settlement");
+        let summary = "";
+        let warCount = 0;  // 主戰次數（支持變法也算激進，但分開統計比較好，我們按立場分：事件1選A為激進變法，事件2~4選A為主戰）
+        if (choices[1] === "A") warCount++;
+        if (choices[2] === "A") warCount++;
+        if (choices[3] === "A") warCount++;
+        if (choices[4] === "A") warCount++;
+
+        let title = "";
+        if (warCount >= 3) title = "🔥 鷹派謀士 · 主戰急先鋒 🔥";
+        else if (warCount === 2) title = "⚖️ 權衡謀士 · 務實主義者 ⚖️";
+        else if (warCount === 1) title = "🍃 鴿派謀士 · 求穩派 🍃";
+        else title = "🕊️ 避戰謀士 · 和平擁護者 🕊️";
+
+        summary = `<h3>📜 你的謀士之路</h3>
+        <p>🔹 王安石變法：${choices[1] === "A" ? "支持全面推行" : "維持舊制"}</p >
+        <p>🔹 靖康之變：${choices[2] === "A" ? "主戰死守" : "主和割地"}</p >
+        <p>🔹 鴉片戰爭：${choices[3] === "A" ? "主戰抵抗" : "主和議約"}</p >
+        <p>🔹 甲午戰爭：${choices[4] === "A" ? "主戰宣戰" : "主和避戰"}</p >
+        <hr>
+        <h2>${title}</h2>
+        <p>✨ 你所做的選擇反映了你在歷史洪流中的傾向。雖然無法改變真實結局，但你的每一次思索都讓你更深刻理解那個時代的兩難。✨</p >
+        <button class="btn-reset" id="resetBtn">🔄 重新開啟遊戲</button>`;
+        settlementDiv.innerHTML = summary;
+        settlementDiv.style.display = "block";
+
+        // 重新開始按鈕
+        document.getElementById("resetBtn").addEventListener("click", () => {
+            location.reload();
+        });
+    }
+
+    // 綁定事件1按鈕
+    document.querySelector(".opt1a")?.addEventListener("click", () => {
+        if (choices[1]) return; // 已選過就不可再改（避免干擾記錄順序，也可以允許改，但為求線性，不建議）
+        choices[1] = "A";
+        showResult(1, "A");
+        unlockNextEvent();
+    });
+    document.querySelector(".opt1b")?.addEventListener("click", () => {
+        if (choices[1]) return;
+        choices[1] = "B";
+        showResult(1, "B");
+        unlockNextEvent();
+    });
+
+    // 事件2按鈕（動態綁定，需要等元素加載後，但因為是靜態存在，直接綁）
+    function bindEvents() {
+        const opt2a = document.querySelector(".opt2a");
+        const opt2b = document.querySelector(".opt2b");
+        if (opt2a) opt2a.addEventListener("click", () => { if (!choices[2]) { choices[2] = "A"; showResult(2, "A"); unlockNextEvent(); } });
+        if (opt2b) opt2b.addEventListener("click", () => { if (!choices[2]) { choices[2] = "B"; showResult(2, "B"); unlockNextEvent(); } });
+        const opt3a = document.querySelector(".opt3a");
+        const opt3b = document.querySelector(".opt3b");
+        if (opt3a) opt3a.addEventListener("click", () => { if (!choices[3]) { choices[3] = "A"; showResult(3, "A"); unlockNextEvent(); } });
+        if (opt3b) opt3b.addEventListener("click", () => { if (!choices[3]) { choices[3] = "B"; showResult(3, "B"); unlockNextEvent(); } });
+        const opt4a = document.querySelector(".opt4a");
+        const opt4b = document.querySelector(".opt4b");
+        if (opt4a) opt4a.addEventListener("click", () => { if (!choices[4]) { choices[4] = "A"; showResult(4, "A"); unlockNextEvent(); } });
+        if (opt4b) opt4b.addEventListener("click", () => { if (!choices[4]) { choices[4] = "B"; showResult(4, "B"); unlockNextEvent(); } });
+    }
+
+    // 開始遊戲
+    document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("gameArea").style.display = "block";
+        // 顯示第一個事件
+        document.getElementById("event1").style.display = "block";
+        bindEvents();
+    });
+</script>
+</body>
+</html>
+```
